@@ -1,7 +1,6 @@
 
   
 # Paradox.ai Olivia - PHP SDK    
- Version: 1.0    
     
 This is an unofficial PHP SDK developed for use with version 1.0 of the Paradox.ai Olivia API.    
     
