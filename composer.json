@@ -1,6 +1,6 @@
 {
-    "name": "darkgoldblade01/paradox-olivia-api",
-    "description": "A PHP SDK for Paradox's Olivia AI.",
+    "name": "darkgoldblade01/paradox-ai-php-sdk",
+    "description": "A PHP SDK for Paradox.ai's Olivia.",
     "authors": [
         {
             "name": "Brian Logan",
