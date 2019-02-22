@@ -1,6 +1,7 @@
 <?php
 namespace darkgoldblade01\Paradox\Olivia;
 
+use darkgoldblade01\Paradox\Olivia\Resources\Candidates;
 use darkgoldblade01\Paradox\Olivia\Resources\Company;
 use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
@@ -139,6 +140,20 @@ class Olivia
     }
 
     /**
+     * Candidates
+     *
+     * Returns a new instance of the candidates object.
+     *
+     * @throws \Exception
+     *
+     * @return Candidates
+     */
+    public function candidates()
+    {
+        return new Candidates($this->account_id, $this->secret_key, $this->uid);
+    }
+
+    /**
      * Get
      *
      * Sends a GET request to the
@@ -149,7 +164,7 @@ class Olivia
      *
      * @return mixed
      */
-    public function get($endpoint, $opts = []) {
+    protected function get($endpoint, $opts = []) {
         $response = $this->client->get($endpoint, $opts);
         return json_decode($response->getBody()->getContents());
     }
@@ -165,7 +180,7 @@ class Olivia
      *
      * @return mixed
      */
-    public function post($endpoint, $opts = []) {
+    protected function post($endpoint, $opts = []) {
         $response = $this->client->post($endpoint, $opts);
         return json_decode($response->getBody()->getContents());
     }
@@ -181,7 +196,7 @@ class Olivia
      *
      * @return mixed
      */
-    public function put($endpoint, $opts = []) {
+    protected function put($endpoint, $opts = []) {
         $response = $this->client->put($endpoint, $opts);
         return json_decode($response->getBody()->getContents());
     }
@@ -197,8 +212,21 @@ class Olivia
      *
      * @return mixed
      */
-    public function delete($endpoint, $opts = []) {
+    protected function delete($endpoint, $opts = []) {
         $response = $this->client->delete($endpoint, $opts);
         return json_decode($response->getBody()->getContents());
+    }
+
+    /**
+     * Coming Soon
+     *
+     * Throw an exception letting
+     * the developer know that the
+     * endpoint is coming soon.
+     *
+     * @throws \Exception
+     */
+    protected function coming_soon() {
+        throw new \Exception('Coming Soon to the SDK');
     }
 }
