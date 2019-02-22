@@ -46,4 +46,20 @@ class Company extends Olivia
             ]
         ]);
     }
+
+
+    /**
+     * Get AI Assistant
+     *
+     * Get the AI Assistant's
+     * name and image for the
+     * company you are authorized as.
+     *
+     * Reference: https://paradox.readme.io/v1.0/reference#get-ai-assistants-name-and-image
+     *
+     * @return mixed
+     */
+    public function get_ai_assistant() {
+        return $this->get('company/ai');
+    }
 }
