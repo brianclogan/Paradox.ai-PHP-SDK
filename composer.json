@@ -1,0 +1,23 @@
+{
+    "name": "darkgoldblade01/paradox-olivia-api",
+    "description": "A PHP SDK for Paradox's Olivia AI.",
+    "authors": [
+        {
+            "name": "Brian Logan",
+            "email": "brianldj@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "darkgoldblade01\\Paradox\\Olivia\\": "src"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "firebase/php-jwt": "^5.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.2",
+        "filp/whoops": "^2.3"
+    }
+}
