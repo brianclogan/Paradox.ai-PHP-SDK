@@ -30,7 +30,7 @@ Official documentation can be [found here](https://paradox.readme.io/v1.0/refere
      
      
  ## `$olivia->company()`
-Returns the company endpoints that you can interact with.
+Returns the company resource.
   #### `get_conversations($conversations)`    
  | Parameter | Type | Default |  
 |--|--|--|  
