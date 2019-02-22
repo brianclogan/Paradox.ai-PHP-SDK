@@ -62,4 +62,41 @@ class Company extends Olivia
     public function get_ai_assistant() {
         return $this->get('company/ai');
     }
+
+
+    /**
+     * Job Requisition Feed
+     *
+     * Get the Job Requisition
+     * feed for the company you
+     * are authorized as.
+     *
+     * Reference: https://paradox.readme.io/v1.0/reference#job-requisition-feed
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function job_requisition_feed() {
+        $this->coming_soon();
+        return $this->get('company/jobs');
+    }
+
+
+    /**
+     * Users Feed
+     *
+     * Get the Users Feed for the
+     * company you are authorized as.
+     *
+     * Reference: https://paradox.readme.io/v1.0/reference#users-feed
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function users_feed() {
+        $this->coming_soon();
+        return $this->get('company/users');
+    }
 }
