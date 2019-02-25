@@ -57,6 +57,8 @@ class Candidates extends Olivia
      * Creates a candidate for the
      * company you are authorized as.
      *
+     * Reference: https://paradox.readme.io/v1.0/reference#create-candidate
+     *
      * @param Candidate $candidate
      *
      * @throws \Exception
@@ -76,6 +78,8 @@ class Candidates extends Olivia
      * Gets a single candidate for the
      * company you are authorized as.
      *
+     * Reference: https://paradox.readme.io/v1.0/reference#get-candidate
+     *
      * @param string $oid The Olivia ID of the candidate you are trying to get.
      *
      * @throws \Exception
@@ -91,6 +95,8 @@ class Candidates extends Olivia
      *
      * Updates a candidate for the
      * company you are authorized as.
+     *
+     * Reference: https://paradox.readme.io/v1.0/reference#update-candidate
      *
      * @param Candidate $candidate
      *
@@ -109,6 +115,8 @@ class Candidates extends Olivia
      * Deletes a candidate for the
      * company you are authorized as.
      *
+     * Reference: https://paradox.readme.io/v1.0/reference#delete-candidate
+     *
      * @param Candidate $candidate
      *
      * @throws \Exception
@@ -125,6 +133,8 @@ class Candidates extends Olivia
      * Unsubscribe a candidate for the
      * company you are authorized as.
      *
+     * Reference: https://paradox.readme.io/v1.0/reference#unsubscribe-candidate
+     *
      * @param Candidate $candidate
      * @param bool $unsubscribe True to unsubscribe, false to resubscribe
      *
@@ -136,6 +146,82 @@ class Candidates extends Olivia
                 'OID' => $candidate->OID,
                 'action_id' => ($unsubscribe?'1':'0')
             ]
+        ]);
+    }
+
+    /**
+     * Scheduling Shortlist Review
+     *
+     * Send email to hiring manager(s) with
+     * shortlist of candidates to review.
+     *
+     * Reference: https://paradox.readme.io/v1.0/reference#scheduling-shortlists
+     *
+     * @param array $opts
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function scheduling_shortlist_review($opts = []) {
+        $defaultOptions = [
+            'message_id' => null,
+            'to' => null,
+            'email_title' => null,
+            'email_text' => null,
+            'action_link' => null,
+            'sms_text' => null,
+            'action_text' => null,
+            'template' => null
+        ];
+
+        $required = ['to', 'email_title', 'email_text', 'action_link'];
+
+        $options = array_replace_recursive($defaultOptions, $opts);
+
+        foreach($required AS $item) {
+            if($defaultOptions[$item] == null)
+                throw new \Exception('The field `' . $item . '` is required to be passed as an option.');
+        }
+
+        return $this->post('scheduling/communication', [
+            'form_params' => $options
+        ]);
+    }
+
+    /**
+     * Send Candidate Message
+     *
+     * Send a message to the
+     * candidate that is supplied.
+     *
+     * Reference: https://paradox.readme.io/v1.0/reference#send-candidate-message
+     *
+     * @param array $opts
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function send_candidate_message($opts = []) {
+        $defaultOptions = [
+            'OID' => null,
+            'message' => null,
+            'send_as' => null,
+            'contact_method' => null,
+        ];
+
+        $required = ['OID', 'message'];
+
+        $options = array_replace_recursive($defaultOptions, $opts);
+
+        foreach($required AS $item) {
+            if($defaultOptions[$item] == null)
+                throw new \Exception('The field `' . $item . '` is required to be passed as an option.');
+        }
+
+        return $this->post('candidate/send_message', [
+            'form_params' => $options
         ]);
     }
 

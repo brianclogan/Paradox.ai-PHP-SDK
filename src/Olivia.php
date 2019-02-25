@@ -3,6 +3,7 @@ namespace darkgoldblade01\Paradox\Olivia;
 
 use darkgoldblade01\Paradox\Olivia\Resources\Candidates;
 use darkgoldblade01\Paradox\Olivia\Resources\Company;
+use darkgoldblade01\Paradox\Olivia\Resources\Users;
 use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
 
@@ -158,6 +159,20 @@ class Olivia
     public function candidates()
     {
         return new Candidates($this->account_id, $this->secret_key, $this->uid);
+    }
+
+    /**
+     * Users
+     *
+     * Returns a new instance of the users object.
+     *
+     * @throws \Exception
+     *
+     * @return Users
+     */
+    public function users()
+    {
+        return new Users($this->account_id, $this->secret_key, $this->uid);
     }
 
     /**
