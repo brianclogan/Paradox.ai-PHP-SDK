@@ -67,10 +67,17 @@ class Olivia
         $this->uid = $uid;
 
         $defaultOpts = [
-            'base_uri' => 'https://api.paradox.ai/api/v' . $this->version .'/public/',
+//            'candidate_required_fields' => ['name', 'email', 'phone'],
+            'guzzle' => [
+                'base_uri' => 'https://api.paradox.ai/api/v' . $this->version .'/public/',
+            ]
         ];
 
         $this->options = array_replace_recursive($defaultOpts, $opts);
+
+//        if(!in_array('email', $this->options['candidate_required_fields']) || !in_array('phone', $this->options['candidate_required_fields'])) {
+//            throw new \Exception('Phone or Email is required when updating or creating leads.');
+//        }
 
         $this->generate_token();
     }
@@ -105,7 +112,7 @@ class Olivia
     protected function verify_token()
     {
         $test = (new Client())->post(
-            'https://api.paradox.ai/api/v' . $this->version . '/public/auth/verify_jwt_token', [
+        'https://api.paradox.ai/api/v' . $this->version . '/public/auth/verify_jwt_token', [
             'form_params' => [
                 'account_id' => $this->account_id,
                 'jwt_token' => $this->token,
@@ -118,11 +125,11 @@ class Olivia
             throw new \Exception('Unable to verify credentials. Check the Secret Key, Account ID, and UID given.', 500);
         }
 
-        $this->options['headers'] = [
+        $this->options['guzzle']['headers'] = [
             'Authorization' => "jwt {$this->account_id}:{$this->token}"
         ];
 
-        $this->client = new Client($this->options);
+        $this->client = new Client($this->options['guzzle']);
     }
 
     /**

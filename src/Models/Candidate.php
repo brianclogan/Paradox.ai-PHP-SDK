@@ -2,75 +2,54 @@
 
 namespace darkgoldblade01\Paradox\Olivia\Models;
 
-class Candidate {
+class Candidate extends Model {
+
+    protected $create_required_fields = [
+        'name',
+        'phone|email',
+    ];
+
+    protected $update_required_fields = [
+        'OID',
+        'name',
+        'phone|email',
+    ];
 
     public $stage = [];
 
     /**
-     * Candidate constructor.
+     * Fill
      *
-     * @param null $candidate_information
-     */
-    public function __construct($candidate_information = null)
-    {
-        if($candidate_information) {
-            $this->fill($candidate_information);
-        }
-    }
-
-    /**
-     * @param $candidate
+     * Customized fill function for
+     * the Candidate to handle the
+     * stage from the API.
+     *
+     * @param $information
+     *
      * @return $this
      */
-    protected function fill($candidate) {
+    protected function fill($information) {
         $from_api = false;
-        if(isset($candidate->candidate) && isset($candidate->stage)) {
+        if(isset($information->candidate) && isset($information->stage)) {
             $from_api = true;
         }
         if($from_api) {
-            if(isset($candidate->candidate)) {
-                foreach($candidate->candidate AS $key => $val) {
+            if(isset($information->candidate)) {
+                foreach($information->candidate AS $key => $val) {
                     $this->{$key} = $val;
                 }
             }
-            if(isset($candidate->stage)) {
-                foreach($candidate->stage AS $key => $val) {
+            if(isset($information->stage)) {
+                foreach($information->stage AS $key => $val) {
                     $this->stage[$key] = $val;
                 }
             }
         } else {
-            foreach($candidate AS $key => $val) {
+            foreach($information AS $key => $val) {
                 $this->{$key} = $val;
             }
         }
         return $this;
     }
 
-    public function to_array()
-    {
-        return (array) $this;
-    }
-
-    /**
-     * Dynamically retrieve attributes on the model.
-     *
-     * @param  string  $key
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->{$key};
-    }
-
-    /**
-     * Dynamically set attributes on the model.
-     *
-     * @param  string  $key
-     * @param  mixed  $value
-     * @return void
-     */
-    public function __set($key, $value)
-    {
-        $this->{$key} = $value;
-    }
 }

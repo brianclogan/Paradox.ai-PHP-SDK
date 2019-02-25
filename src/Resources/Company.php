@@ -1,6 +1,7 @@
 <?php
 namespace darkgoldblade01\Paradox\Olivia\Resources;
 
+use darkgoldblade01\Paradox\Olivia\Models\Location;
 use darkgoldblade01\Paradox\Olivia\Olivia;
 
 class Company extends Olivia
@@ -40,11 +41,25 @@ class Company extends Olivia
      * @return mixed
      */
     public function get_locations($locations = true) {
-        return $this->get('company/locations', [
+        $response = $this->get('company/locations', [
             'query' => [
-                'conversations' => $locations
+                'locations' => $locations
             ]
         ]);
+
+        $locations = [];
+
+        foreach($response->locations AS $key => $location) {
+            $locations[] = new Location($location);
+        }
+
+        if(function_exists('collect')) {
+            $response->locations = collect($locations);
+        } else {
+            $response->locations = $locations;
+        }
+
+        return $response;
     }
 
 

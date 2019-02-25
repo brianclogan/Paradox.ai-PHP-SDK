@@ -42,7 +42,11 @@ class Candidates extends Olivia
             $candidates[] = new Candidate($candidate);
         }
 
-        $response->candidates = collect($candidates);
+        if(function_exists('collect')) {
+            $response->candidates = collect($candidates);
+        } else {
+            $response->candidates = $candidates;
+        }
 
         return $response;
     }
@@ -55,11 +59,83 @@ class Candidates extends Olivia
      *
      * @param Candidate $candidate
      *
+     * @throws \Exception
+     *
      * @return mixed
      */
     public function create_candidate(Candidate $candidate) {
+        $candidate->can_create();
         return $this->post('candidates', [
             'form_params' => $candidate->to_array()
+        ]);
+    }
+
+    /**
+     * Get Candidate
+     *
+     * Gets a single candidate for the
+     * company you are authorized as.
+     *
+     * @param string $oid The Olivia ID of the candidate you are trying to get.
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function get_candidate($oid) {
+        return new Candidate($this->get('candidates/' . $oid));
+    }
+
+    /**
+     * Update Candidate
+     *
+     * Updates a candidate for the
+     * company you are authorized as.
+     *
+     * @param Candidate $candidate
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function update_candidate(Candidate $candidate) {
+        $candidate->can_update();
+        return new Candidate($this->get('candidates/' . $candidate->OID));
+    }
+
+    /**
+     * Delete Candidate
+     *
+     * Deletes a candidate for the
+     * company you are authorized as.
+     *
+     * @param Candidate $candidate
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function delete_candidate(Candidate $candidate) {
+        return $this->delete('candidates/' . $candidate->OID);
+    }
+
+    /**
+     * Unsubscribe Candidate
+     *
+     * Unsubscribe a candidate for the
+     * company you are authorized as.
+     *
+     * @param Candidate $candidate
+     * @param bool $unsubscribe True to unsubscribe, false to resubscribe
+     *
+     * @return mixed
+     */
+    public function unsubscribe_candidate(Candidate $candidate, $unsubscribe = true) {
+        return $this->put('candidates/unsubscribe', [
+            'form_params' => [
+                'OID' => $candidate->OID,
+                'action_id' => ($unsubscribe?'1':'0')
+            ]
         ]);
     }
 
