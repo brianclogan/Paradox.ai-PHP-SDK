@@ -4,56 +4,45 @@ namespace darkgoldblade01\Paradox\Olivia\Resources;
 use darkgoldblade01\Paradox\Olivia\Models\Candidate;
 use darkgoldblade01\Paradox\Olivia\Olivia;
 
-class Candidates extends Olivia
+class Scheduling extends Olivia
 {
 
     /**
-     * Get Candidates
+     * Get Multiparty Interviews
      *
-     * Get the candidates for the
-     * company you are authorized as.
-	 *
-	 * Opts Defaults:
-	 *
-	 * $opts = [
-	 *		'start_date' => null,
-	 *		'end_date' => null,
-	 *		'start_keyword' => null,
-	 *		'limit' => 15,
-	 *		'status' => null,
-	 *		'group_name' => null,
-	 *		'location_id' => null,
-	 *		'source' => null,
-	 *		'conversations' => null
-	 *	];
+     * Get multiparty interviews.
      *
-     * Reference: https://paradox.readme.io/v1.0/reference#get-candidates
+     * Reference: https://paradox.readme.io/v1.0/reference#get-multiparty-interviewers
      *
      * @param array $opts
      *
+     * @throws \Exception
+     *
      * @return object Returns an object with total count, limit, offset, and candidates that are in a collection.
      */
-    public function get_candidates(array $opts = []) {
+    public function get_multiparty_interviews(array $opts = []) {
         $defaultOptions = [
-			'start_date' => null,
-			'end_date' => null,
-			'start_keyword' => null,
-			'limit' => 15,
-			'status' => null,
-			'group_name' => null,
-			'location_id' => null,
-			'source' => null,
-			'conversations' => null
+            'OID' => null,
+            'interview_type' => null,
+            'jobloc_id' => null,
+            'load_joblocs' => null,
+            'load_rr_groups' => null,
         ];
 
         $options = array_replace_recursive($defaultOptions, $opts);
 
-        $response = $this->get('candidates', [
-        	'query' => $options
-		]);
+        $required_options = [ 'OID', 'interview_type' ];
+
+        foreach($required_options AS $option) {
+            if($options[$option] == null) {
+                throw new \Exception('The option `'. $option . '` is required to be in the options.');
+            }
+        }
+
+        $response = $this->get('interview/mp_list_interviewers', $options);
 
         $candidates = [];
-        
+
         foreach($response->candidates AS $key => $candidate) {
             $candidates[] = new Candidate($candidate);
         }
@@ -87,27 +76,23 @@ class Candidates extends Olivia
             'form_params' => $candidate->to_array()
         ]);
     }
-	
-	/**
-	 * Get Candidate
-	 *
-	 * Gets a single candidate for the
-	 * company you are authorized as.
-	 *
-	 * Reference: https://paradox.readme.io/v1.0/reference#get-candidate
-	 *
-	 * @param string $oid The Olivia ID of the candidate you are trying to get.
-	 *
-	 * @param bool   $conversations
-	 *
-	 * @return mixed
-	 */
-    public function get_candidate($oid, $conversations = false) {
-        return $this->get('candidates/' . $oid, [
-        	'query' => [
-        		'conversations' => $conversations,
-			]
-		]);
+
+    /**
+     * Get Candidate
+     *
+     * Gets a single candidate for the
+     * company you are authorized as.
+     *
+     * Reference: https://paradox.readme.io/v1.0/reference#get-candidate
+     *
+     * @param string $oid The Olivia ID of the candidate you are trying to get.
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function get_candidate($oid) {
+        return new Candidate($this->get('candidates/' . $oid));
     }
 
     /**

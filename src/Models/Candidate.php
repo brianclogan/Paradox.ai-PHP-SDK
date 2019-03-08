@@ -14,8 +14,26 @@ class Candidate extends Model {
         'name',
         'phone|email',
     ];
-
+	
+	/**
+	 * Stage
+	 *
+	 * Holds the stage that
+	 * the candidate is at.
+	 *
+	 * @var array
+	 */
     public $stage = [];
+	
+	/**
+	 * Conversation
+	 *
+	 * Contains the messages
+	 * to and from the candidate.
+	 *
+	 * @var array
+	 */
+    public $conversation = [];
 
     /**
      * Fill
@@ -39,11 +57,16 @@ class Candidate extends Model {
                     $this->{$key} = $val;
                 }
             }
-            if(isset($information->stage)) {
-                foreach($information->stage AS $key => $val) {
-                    $this->stage[$key] = $val;
-                }
-            }
+			if(isset($information->stage)) {
+				foreach($information->stage AS $key => $val) {
+					$this->stage[$key] = $val;
+				}
+			}
+			if(isset($information->conversation)) {
+				foreach($information->conversation AS $key => $val) {
+					$this->conversation[$key] = $val;
+				}
+			}
         } else {
             foreach($information AS $key => $val) {
                 $this->{$key} = $val;
